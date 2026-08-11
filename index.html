@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plano de Testes de Homologação - Gestão de Acessos</title>
+
+  <!-- Importando a fonte Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Importando PDF.js para renderização de PDFs anexados -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (window['pdfjs-dist/build/pdf']) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
+
+  <style>
+    :root {
+      --primary-color: #e30613;
+      /* HITSS Red */
+      --primary-hover: #b8050e;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --text-secondary: #64748b;
+      --border-color: #e2e8f0;
+      --success-color: #10b981;
+      --danger-color: #ef4444;
+      --warning-color: #f59e0b;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+      --radius: 12px;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-color: #f8fafc;
+      --text-secondary: #94a3b8;
+      --border-color: #334155;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Header styling */
+    .header-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary-color), #f59e0b);
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .logo-img {
+      max-height: 70px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .theme-toggle-btn {
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-toggle-btn:hover {
+      background-color: var(--border-color);
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-color);
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    /* Controls bar */
+    .controls-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-color);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      margin-bottom: 30px;
+    }
+
+    .card h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 8px;
+      color: var(--text-color);
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--text-secondary);
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    [data-theme="dark"] th {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    tr:hover {
+      background-color: rgba(0, 0, 0, 0.01);
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 4px solid var(--warning-color);
+      background-color: rgba(245, 158, 11, 0.06);
+      margin: 15px 0;
+      font-size: 14px;
+    }
+
+    .alert-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--warning-color);
+    }
+
+    /* Two-column layout */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .scope-box {
+      padding: 20px;
+      border-radius: 8px;
+      background-color: rgba(0, 0, 0, 0.01);
+      border: 1px dashed var(--border-color);
+    }
+
+    .scope-box h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .scope-box ul {
+      padding-left: 20px;
+    }
+
+    .scope-box li {
+      margin-bottom: 8px;
+    }
+
+    /* Checkboxes/Interactive Results */
+    .result-selector {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+      background: var(--bg-color);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .result-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .result-option input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary-color);
+    }
+
+    /* Test Case styling */
+    .test-case {
+      border-left: 4px solid var(--primary-color);
+      padding-left: 20px;
+      margin-bottom: 40px;
+    }
+
+    .test-case h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-color);
+    }
+
+    .test-case-detail {
+      margin-bottom: 15px;
+    }
+
+    .test-case-detail h4 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .test-case-detail ul,
+    .test-case-detail ol {
+      padding-left: 20px;
+    }
+
+    .test-case-detail li {
+      margin-bottom: 6px;
+    }
+
+    .evidence-box {
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-top: 10px;
+      background-color: rgba(0, 0, 0, 0.01);
+      cursor: pointer;
+      outline: none;
+      position: relative;
+    }
+
+    .evidence-box:focus {
+      border-color: var(--primary-color);
+      background-color: rgba(227, 6, 19, 0.02);
+    }
+
+    .evidence-box:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Editable Fields */
+    .editable-input {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .editable-textarea {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background-color: white !important;
+        color: black !important;
+        padding: 0 !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .card,
+      .header-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin-bottom: 30px !important;
+        background: transparent !important;
+      }
+
+      .header-card::before {
+        display: none;
+      }
+
+      .test-case {
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+        border-left: 2px solid #000;
+        margin-bottom: 30px;
+      }
+
+      table {
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+      }
+
+      th {
+        background-color: #f1f5f9 !important;
+        color: black !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .evidence-box {
+        border: 1px solid #cbd5e1 !important;
+        background: transparent !important;
+        max-height: none !important;
+      }
+
+      .evidence-image-container {
+        display: block !important;
+        max-width: 100% !important;
+      }
+
+      .evidence-image-container img {
+        max-height: none !important;
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .evidence-pdf-container {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+
+      .pdf-pages-container {
+        max-height: none !important;
+        overflow: visible !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+
+      .pdf-pages-container canvas,
+      .pdf-pages-container iframe {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        margin-bottom: 15px !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .result-selector {
+        border: 1px solid #cbd5e1 !important;
+        background: transparent !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: black !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Controls (No Print) -->
+    <div class="controls-bar no-print">
+      <button class="btn btn-primary" onclick="window.print()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path
+            d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2m-12 0v5h12v-5M9 14h6" />
+        </svg>
+        Imprimir / Salvar como PDF
+      </button>
+      <button class="btn btn-secondary" id="theme-toggle" onclick="toggleTheme()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707.707M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
+        </svg>
+        Alternar Tema
+      </button>
+      <button class="btn btn-secondary" onclick="saveState()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2zM17 21v-8H7v8M7 3v5h8" />
+        </svg>
+        Salvar Progresso
+      </button>
+    </div>
+
+    <!-- Header -->
+    <div class="header-card">
+      <div class="logo-container">
+        <img src="logo.png" class="logo-img" alt="HITSS Logo" onerror="this.style.display='none'">
+      </div>
+      <h1>PLANO DE TESTES DE HOMOLOGAÇÃO</h1>
+      <div class="subtitle">Gestão de Acessos - HOT x BP WEB</div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%">Campo</th>
+            <th>Informação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Projeto</strong></td>
+            <td>HOT x BP WEB (Gestão de Acessos - Link HOT e Grupos)</td>
+          </tr>
+          <tr>
+            <td><strong>Ambiente</strong></td>
+            <td>Homologação</td>
+          </tr>
+          <tr>
+            <td><strong>Responsável QA</strong></td>
+            <td>Matheus H Campos</td>
+          </tr>
+          <tr>
+            <td><strong>PO do Projeto</strong></td>
+            <td>Bruna Miguel</td>
+          </tr>
+          <tr>
+            <td><strong>Data Planejada</strong></td>
+            <td>10/08/2026</td>
+          </tr>
+          <tr>
+            <td><strong>Versão do Sistema</strong></td>
+            <td>1.0 (Gestão de Acessos)</td>
+          </tr>
+          <tr>
+            <td><strong>Cliente</strong></td>
+            <td>HITSS do Brasil</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Objetivo -->
+    <div class="card">
+      <h2>2. OBJETIVO</h2>
+      <p>Validar as regras de controle de acesso e visualização de Business Plans (BPs) no BP Web integrados com o
+        sistema HOT. O objetivo principal é garantir a restrição de dados sensíveis apenas aos usuários corretos
+        (envolvidos na demanda no HOT e grupos estratégicos corporativos), prevenindo vazamento de informações e
+        assegurando a rastreabilidade e autoria das demandas.
+      </p>
+    </div>
+
+    <!-- Escopo -->
+    <div class="card">
+      <h2>3. ESCOPO</h2>
+      <div class="grid-2">
+        <div class="scope-box" style="border-left: 4px solid var(--success-color);">
+          <h3 style="color: var(--success-color); font-weight: 700;">Dentro do Escopo</h3>
+          <ul>
+            <li><strong>Gestão de Acessos:</strong> Exibição do próprio usuário logado e permissões associadas.</li>
+            <li><strong>Grupos Especiais:</strong> Acesso de leitura a todos os BPs para Planejamento, Financeiro e SPE.
+            </li>
+            <li><strong>Vínculo HOT:</strong> Visualização do BP correspondente por envolvidos na demanda HOT via link.
+            </li>
+            <li><strong>Bloqueio de Acesso:</strong> Restrição de leitura a usuários não envolvidos/não autorizados.
+            </li>
+            <li><strong>Edição de Permissões:</strong> Inclusão e exclusão manual de acesso a colaboradores.</li>
+          </ul>
+        </div>
+        <!-- <div class="scope-box" style="border-left: 4px solid var(--text-secondary);">
+          <h3 style="color: var(--text-secondary); font-weight: 700;">Fora do Escopo</h3>
+          <ul>
+            <li>Testes de infraestrutura do provedor de identidade (SSO/AD).</li>
+            <li>Edição e preenchimento de campos operacionais por quem possui perfil somente leitura.</li>
+          </ul>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- Matriz de Rastreabilidade -->
+    <div class="card">
+      <h2>4. MATRIZ DE RASTREABILIDADE</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%">Condição de Validação</th>
+            <th style="width: 55%">Descrição</th>
+            <th style="width: 20%">Caso de Teste</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>CV-ACC-001</strong></td>
+            <td>Visualização do próprio usuário logado na aba de Gestão de Acessos do BP</td>
+            <td><span style="font-family: monospace; font-weight: 600;">CT-ACC-001</span></td>
+          </tr>
+          <tr>
+            <td><strong>CV-ACC-002</strong></td>
+            <td>Visualização de todos os BPs por usuários dos grupos Planejamento, Financeiro e SPE</td>
+            <td><span style="font-family: monospace; font-weight: 600;">CT-ACC-002</span></td>
+          </tr>
+          <tr>
+            <td><strong>CV-ACC-003</strong></td>
+            <td>Visualização do BP via link HOT por usuário envolvido na demanda correspondente</td>
+            <td><span style="font-family: monospace; font-weight: 600;">CT-ACC-003</span></td>
+          </tr>
+          <tr>
+            <td><strong>CV-ACC-004</strong></td>
+            <td>Bloqueio de visualização de BP via link para usuários não envolvidos/não autorizados</td>
+            <td><span style="font-family: monospace; font-weight: 600;">CT-ACC-004</span></td>
+          </tr>
+          <!-- <tr>
+            <td><strong>CV-ACC-005</strong></td>
+            <td>Edição de permissões (adicionar/remover acesso) na aba de Gestão de Acessos do BP</td>
+            <td><span style="font-family: monospace; font-weight: 600;">CT-ACC-005</span></td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Casos de Teste -->
+    <div class="card">
+      <h2>5. CASOS DE TESTE</h2>
+
+      <!-- CT-ACC-001 -->
+      <div class="test-case" id="ct-acc-001">
+        <h3>CV-ACC-001/CT-ACC-001 - Visualização do Próprio Usuário na Aba de Gestão de Acessos</h3>
+
+        <div class="test-case-detail">
+          <h4>Objetivo</h4>
+          <p>Validar que o usuário que está visualizando ou editando um BP consiga ver seu próprio cadastro e nível de
+            permissão listados na aba "Gestão de Acessos" daquele BP específico.</p>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Pré-condições</h4>
+          <ul>
+            <li>Usuário logado ao BP Web.</li>
+          </ul>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Passos para reproduzir</h4>
+          <ol>
+            <li>Acessar o BP Web.</li>
+            <li>Clicar na aba <strong>Gestão de Acessos</strong> </li>
+            <li>Procurar o próprio nome/usuário na lista de acessos.</li>
+          </ol>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Resultado Esperado</h4>
+          <ul>
+            <li>A aba Gestão de Acessos é aberta com sucesso.</li>
+            <li>O próprio usuário é listado de forma clara, indicando o tipo de perfil dele (ex: Elaborador, Gestor,
+              SPE, etc.) e suas permissões (Ativo).</li>
+          </ul>
+        </div>
+
+        <div class="test-case-detail no-print">
+          <h4>Evidência do Teste (Print da Tela)</h4>
+          <div class="evidence-box">
+            Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)
+          </div>
+        </div>
+
+        <div class="test-case-result">
+          <label class="result-option">
+            <input type="radio" name="res-ct-acc-001" value="aprovado"> Aprovado
+          </label>
+          <label class="result-option">
+            <input type="radio" name="res-ct-acc-001" value="reprovado"> Reprovado
+          </label>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 30px 0;" class="no-print">
+
+      <!-- CT-ACC-002 -->
+      <div class="test-case" id="ct-acc-002">
+        <h3>CV-ACC-002/CT-ACC-002 - Visualização de todos os BPs por Grupos Especiais (Planejamento, Financeiro, SPE)
+        </h3>
+
+        <div class="test-case-detail">
+          <h4>Objetivo</h4>
+          <p>Garantir que usuários pertencentes aos grupos Planejamento, Financeiro ou SPE consigam listar, pesquisar e
+            visualizar os detalhes de qualquer BP cadastrado na base, mesmo que não sejam os criadores ou envolvidos
+            diretos.</p>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Pré-condições</h4>
+          <ul>
+            <li>Usuário cadastrado no sistema BP Web vinculado a pelo menos um dos seguintes grupos:
+              <strong>Planejamento</strong>, <strong>Financeiro</strong> ou <strong>SPE</strong>.
+            </li>
+            <li>Existência de BPs cadastrados na base por outros usuários e setores sem relacionamento com o usuário de
+              teste.</li>
+          </ul>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Passos para reproduzir</h4>
+          <ol>
+            <li>Acessar o sistema BP Web em homologação.</li>
+            <li>Logar com o perfil de usuário do grupo de teste (ex: Planejamento).</li>
+            <li>Navegar até a tela de listagem de Business Plans.</li>
+            <li>Tentar localizar e abrir um BP criado por um usuário.</li>
+          </ol>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Resultado Esperado</h4>
+          <ul>
+            <li>O sistema exibe todos os BPs na tabela principal para visualização dos grupos especiais.</li>
+            <li>O usuário consegue abrir e visualizar todos os dados do BP de terceiros sem bloqueios.</li>
+          </ul>
+        </div>
+
+        <div class="test-case-detail no-print">
+          <h4>Evidência do Teste (Print da Tela)</h4>
+          <div class="evidence-box">
+            Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)
+          </div>
+        </div>
+
+        <div class="test-case-result">
+          <label class="result-option">
+            <input type="radio" name="res-ct-acc-002" value="aprovado"> Aprovado
+          </label>
+          <label class="result-option">
+            <input type="radio" name="res-ct-acc-002" value="reprovado"> Reprovado
+          </label>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 30px 0;" class="no-print">
+
+      <!-- CT-ACC-003 -->
+      <div class="test-case" id="ct-acc-003">
+        <h3>CV-ACC-003/CT-ACC-003 - Visualização de BP via Link HOT por Usuário Envolvido</h3>
+
+        <div class="test-case-detail">
+          <h4>Objetivo</h4>
+          <p>Garantir que um usuário que esteja cadastrado como envolvido em uma demanda no HOT consiga acessar e
+            visualizar os detalhes do BP correspondente ao clicar no link do HOT.</p>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Pré-condições</h4>
+          <ul>
+            <li>Demanda de projeto criada no HOT contendo o link do BP Web correspondente.</li>
+            <li>Usuário logado e <strong>Envolvido</strong> da referida demanda.</li>
+          </ul>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Passos para reproduzir</h4>
+          <ol>
+            <li>Acessar a demanda de projeto pelo sistema HOT.</li>
+            <li>Certificar-se que seu usuário está listado como "Envolvido" naquela demanda.</li>
+            <li>Localizar o link que redireciona para o BP vinculado no BP Web.</li>
+            <li>Clicar no link HOT.</li>
+            <li>Verificar se o BP Web abre e exibe a visualização da tela com sucesso.</li>
+          </ol>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Resultado Esperado</h4>
+          <ul>
+            <li>O link HOT redireciona o usuário para o BP Web com o contexto correto.</li>
+            <li>O BP Web valida que o usuário é um envolvido direto e abre o BP para leitura sem bloqueios de segurança.
+            </li>
+          </ul>
+        </div>
+
+        <div class="test-case-detail no-print">
+          <h4>Evidência do Teste (Print da Tela)</h4>
+          <div class="evidence-box">
+            Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)
+          </div>
+        </div>
+
+        <div class="test-case-result">
+          <label class="result-option">
+            <input type="radio" name="res-ct-acc-003" value="aprovado"> Aprovado
+          </label>
+          <label class="result-option">
+            <input type="radio" name="res-ct-acc-003" value="reprovado"> Reprovado
+          </label>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 30px 0;" class="no-print">
+
+      <!-- CT-ACC-004 -->
+      <div class="test-case" id="ct-acc-004">
+        <h3>CV-ACC-004/CT-ACC-004 - Bloqueio de Visualização via Link HOT para Usuário NÃO Envolvido</h3>
+
+        <div class="test-case-detail">
+          <h4>Objetivo</h4>
+          <p>Garantir a segurança dos dados validando que um usuário que NÃO esteja cadastrado como envolvido na demanda
+            HOT e NÃO pertença aos grupos Planejamento, Financeiro ou SPE seja impedido de visualizar o BP ao tentar
+            acessar via link direto.</p>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Pré-condições</h4>
+          <ul>
+            <li>Link direto do BP Web copiado.</li>
+            <li>Usuário de teste logado que NÃO esteja cadastrado como envolvido naquela demanda e NÃO pertença a nenhum
+              dos 3 grupos especiais.</li>
+          </ul>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Passos para reproduzir</h4>
+          <ol>
+            <li>Copiar o link de visualização de um BP privado.</li>
+            <li>Efetuar login no BP Web com a conta do usuário não autorizado.</li>
+            <li>Colar a URL do link direto do BP na barra de endereços do navegador e pressionar Enter.</li>
+            <li>Verificar se o sistema impede o acesso.</li>
+          </ol>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Resultado Esperado</h4>
+          <ul>
+            <li>O sistema identifica que o usuário não possui direito de acesso ao BP.</li>
+            <li>O acesso é negado exibindo mensagem de erro (ex: <em>"403 Acesso Negado"</em> ou <em>"Você não possui
+                permissão para visualizar este BP"</em>) ou redirecionando para a página inicial com segurança.</li>
+          </ul>
+        </div>
+
+        <div class="test-case-detail no-print">
+          <h4>Evidência do Teste (Print da Tela)</h4>
+          <div class="evidence-box">
+            Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)
+          </div>
+        </div>
+
+        <div class="test-case-result">
+          <label class="result-option">
+            <input type="radio" name="res-ct-acc-004" value="aprovado"> Aprovado
+          </label>
+          <label class="result-option">
+            <input type="radio" name="res-ct-acc-004" value="reprovado"> Reprovado
+          </label>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 30px 0;" class="no-print">
+
+      <!-- CT-ACC-005
+      <div class="test-case" id="ct-acc-005">
+        <h3>CV-ACC-005/CT-ACC-005 - Gerenciamento de Acessos (Adicionar/Remover Colaboradores)</h3>
+
+        <div class="test-case-detail">
+          <h4>Objetivo</h4>
+          <p>Validar que o proprietário (Elaborador do BP) consiga incluir novos colaboradores com acessos de
+            edição/leitura e remover acessos de usuários existentes a partir da aba de Gestão de Acessos do BP Web,
+            atualizando os privilégios imediatamente.</p>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Pré-condições</h4>
+          <ul>
+            <li>Usuário logado com perfil de Elaborador/Dono do BP.</li>
+            <li>BP em modo de edição.</li>
+          </ul>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Passos para reproduzir</h4>
+          <ol>
+            <li>Abrir o BP correspondente e ir na aba <strong>Gestão de Acessos</strong>.</li>
+            <li>Clicar no botão <strong>Adicionar Usuário</strong>.</li>
+            <li>Pesquisar e selecionar um usuário de teste secundário (ex: <em>"joao.teste"</em>).</li>
+            <li>Definir a permissão dele (ex: <em>"Leitura"</em>) e clicar em <strong>Salvar</strong>.</li>
+            <li>Logar com o usuário secundário e validar se o BP agora aparece em seu painel.</li>
+            <li>Retornar ao usuário proprietário e clicar em <strong>Remover/Excluir</strong> na linha do usuário
+              secundário na aba Gestão de Acessos.</li>
+            <li>Logar novamente com o usuário secundário e tentar acessar o BP.</li>
+          </ol>
+        </div>
+
+        <div class="test-case-detail">
+          <h4>Resultado Esperado</h4>
+          <ul>
+            <li>A inclusão de novo usuário na aba salva com sucesso e o usuário secundário passa a visualizar o BP.</li>
+            <li>A remoção do usuário secundário retira imediatamente suas permissões, bloqueando novas tentativas de
+              visualização dele ao BP.</li>
+          </ul>
+        </div>
+
+        <div class="test-case-detail no-print">
+          <h4>Evidência do Teste (Print da Tela)</h4>
+          <div class="evidence-box">
+            Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)
+          </div>
+        </div>
+
+        <div class="test-case-result">
+          <label class="result-option">
+            <input type="radio" name="res-ct-acc-005" value="aprovado"> Aprovado
+          </label>
+          <label class="result-option">
+            <input type="radio" name="res-ct-acc-005" value="reprovado"> Reprovado
+          </label>
+        </div>
+      </div> -->
+
+    </div>
+
+    <!-- Registro de Melhorias -->
+    <div class="card">
+      <h2>6. REGISTRO DE MELHORIAS</h2>
+      <button class="btn btn-secondary no-print" onclick="addImprovementRow()"
+        style="margin-bottom: 15px; padding: 8px 16px;">+ Adicionar Melhoria</button>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 15%">ID</th>
+            <th style="width: 45%">Descrição</th>
+            <th style="width: 15%">Impacto</th>
+            <th style="width: 15%">Prioridade</th>
+            <th style="width: 10%">Responsável</th>
+          </tr>
+        </thead>
+        <tbody id="improvements-tbody">
+          <tr>
+            <td><input type="text" class="editable-input improvement-id" value="OM-ACC-001"></td>
+            <td><input type="text" class="editable-input improvement-desc"
+                placeholder="Descreva a melhoria identificada..."></td>
+            <td><input type="text" class="editable-input improvement-imp" placeholder="Ex: Alto/Médio"></td>
+            <td><input type="text" class="editable-input improvement-prio" placeholder="Ex: Média"></td>
+            <td><input type="text" class="editable-input improvement-resp" placeholder="Nome"></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="editable-input improvement-id" value="OM-ACC-002"></td>
+            <td><input type="text" class="editable-input improvement-desc"
+                placeholder="Descreva a melhoria identificada..."></td>
+            <td><input type="text" class="editable-input improvement-imp" placeholder="Ex: Alto/Médio"></td>
+            <td><input type="text" class="editable-input improvement-prio" placeholder="Ex: Média"></td>
+            <td><input type="text" class="editable-input improvement-resp" placeholder="Nome"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Controle de Execução -->
+    <div class="card">
+      <h2>7. CONTROLE DE EXECUÇÃO</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 15%">Caso de Teste</th>
+            <th style="width: 25%">Executor</th>
+            <th style="width: 20%">Data</th>
+            <th style="width: 20%">Resultado</th>
+            <th style="width: 20%">Evidência</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>CT-ACC-001</strong></td>
+            <td><input type="text" class="editable-input" placeholder="Nome do Executor"></td>
+            <td><input type="date" class="editable-input"></td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Passou">Passou</option>
+                <option value="Falhou">Falhou</option>
+              </select>
+            </td>
+            <td><input type="text" class="editable-input" placeholder="Link/Anexo"></td>
+          </tr>
+          <tr>
+            <td><strong>CT-ACC-002</strong></td>
+            <td><input type="text" class="editable-input" placeholder="Nome do Executor"></td>
+            <td><input type="date" class="editable-input"></td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Passou">Passou</option>
+                <option value="Falhou">Falhou</option>
+              </select>
+            </td>
+            <td><input type="text" class="editable-input" placeholder="Link/Anexo"></td>
+          </tr>
+          <tr>
+            <td><strong>CT-ACC-003</strong></td>
+            <td><input type="text" class="editable-input" placeholder="Nome do Executor"></td>
+            <td><input type="date" class="editable-input"></td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Passou">Passou</option>
+                <option value="Falhou">Falhou</option>
+              </select>
+            </td>
+            <td><input type="text" class="editable-input" placeholder="Link/Anexo"></td>
+          </tr>
+          <tr>
+            <td><strong>CT-ACC-004</strong></td>
+            <td><input type="text" class="editable-input" placeholder="Nome do Executor"></td>
+            <td><input type="date" class="editable-input"></td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Passou">Passou</option>
+                <option value="Falhou">Falhou</option>
+              </select>
+            </td>
+            <td><input type="text" class="editable-input" placeholder="Link/Anexo"></td>
+          </tr>
+          <!-- <tr>
+            <td><strong>CT-ACC-005</strong></td>
+            <td><input type="text" class="editable-input" placeholder="Nome do Executor"></td>
+            <td><input type="date" class="editable-input"></td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Passou">Passou</option>
+                <option value="Falhou">Falhou</option>
+              </select>
+            </td>
+            <td><input type="text" class="editable-input" placeholder="Link/Anexo"></td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Critérios de Aceitação -->
+    <div class="card">
+      <h2>8. CRITÉRIOS DE ACEITAÇÃO</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 75%">Critério</th>
+            <th style="width: 25%">Resultado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>O próprio usuário logado é exibido na lista da aba de Gestão de Acessos do BP</td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Usuários dos grupos Planejamento, Financeiro e SPE visualizam BPs de qualquer autoria</td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Usuário envolvido na demanda HOT consegue visualizar o BP correspondente via link HOT</td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Usuário não envolvido na demanda HOT e fora dos grupos é bloqueado ao tentar acessar o BP</td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>A adição de usuário na aba de Gestão de Acessos confere permissão imediata de acesso</td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>A remoção de usuário na aba de Gestão de Acessos retira permissão imediata de acesso</td>
+            <td>
+              <select class="editable-input">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Resumo Executivo -->
+    <div class="card">
+      <h2>9. RESUMO EXECUTIVO DA HOMOLOGAÇÃO</h2>
+
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Resultado Geral</h3>
+        <div class="result-selector" style="margin-top: 0;">
+          <label class="result-option">
+            <input type="radio" name="resultado-geral" value="aprovado-producao"> Aprovado para Produção
+          </label>
+          <label class="result-option">
+            <input type="radio" name="resultado-geral" value="aprovado-ressalvas"> Aprovado com Ressalvas
+          </label>
+          <label class="result-option">
+            <input type="radio" name="resultado-geral" value="reprovado"> Reprovado
+          </label>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Riscos Identificados</h3>
+        <textarea class="editable-textarea" placeholder="Descreva os riscos detectados durante os testes..."></textarea>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Pendências</h3>
+        <textarea class="editable-textarea" placeholder="Descreva pendências críticas para correção..."></textarea>
+      </div>
+
+      <div>
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Observações</h3>
+        <textarea class="editable-textarea" placeholder="Observações gerais adicionais..."></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Script para gerenciar temas
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+    // Carregar tema salvo
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // --- INDEXEDDB PARA ARMAZENAMENTO DE ALTO VOLUME ---
+    const DB_NAME = 'HomologacaoTestDB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'test_state';
+
+    function getDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = function (e) {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME);
+          }
+        };
+        request.onsuccess = function (e) {
+          resolve(e.target.result);
+        };
+        request.onerror = function (e) {
+          reject(e.target.error);
+        };
+      });
+    }
+
+    // Usar IndexedDB para persistir o estado do plano de testes
+    function saveToDB(key, val) {
+      return getDB().then(db => {
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, 'readwrite');
+          const store = tx.objectStore(STORE_NAME);
+          const req = store.put(val, key);
+          req.onsuccess = () => resolve();
+          req.onerror = () => reject(req.error);
+        });
+      });
+    }
+
+    function getFromDB(key) {
+      return getDB().then(db => {
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, 'readonly');
+          const store = tx.objectStore(STORE_NAME);
+          const req = store.get(key);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      });
+    }
+
+    // --- COMPRESSÃO DE IMAGENS ---
+    function compressImage(file, callback) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          callback(compressedDataUrl);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // --- CONTROLES DE ANEXOS DE IMAGEM/PDF ---
+    document.querySelectorAll('.evidence-box').forEach((box, index) => {
+      box.addEventListener('paste', function (e) {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        for (let item of items) {
+          if (item.kind === 'file') {
+            const file = item.getAsFile();
+            if (file) {
+              const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+              const isImage = file.type.startsWith('image/');
+              if (isImage) {
+                compressImage(file, function (compressedUrl) {
+                  displayImage(box, compressedUrl, file.name);
+                });
+              } else if (isPDF) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                  displayImage(box, event.target.result, file.name);
+                };
+                reader.readAsDataURL(file);
+              }
+            }
+          }
+        }
+      });
+
+      box.addEventListener('dragover', e => {
+        e.preventDefault();
+        box.style.borderColor = 'var(--primary-color)';
+        box.style.backgroundColor = 'rgba(227, 6, 19, 0.02)';
+      });
+
+      box.addEventListener('dragleave', () => {
+        box.style.borderColor = 'var(--border-color)';
+        box.style.backgroundColor = 'rgba(0, 0, 0, 0.01)';
+      });
+
+      box.addEventListener('drop', e => {
+        e.preventDefault();
+        box.style.borderColor = 'var(--border-color)';
+        box.style.backgroundColor = 'rgba(0, 0, 0, 0.01)';
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          const file = files[0];
+          const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+          const isImage = file.type.startsWith('image/');
+          if (isImage) {
+            compressImage(file, function (compressedUrl) {
+              displayImage(box, compressedUrl, file.name);
+            });
+          } else if (isPDF) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              displayImage(box, event.target.result, file.name);
+            };
+            reader.readAsDataURL(file);
+          } else {
+            alert('Por favor, envie um arquivo de imagem ou PDF.');
+          }
+        }
+      });
+
+      box.addEventListener('click', function (e) {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('.evidence-image-container') || e.target.closest('.evidence-pdf-container') || e.target.closest('a')) return;
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*,application/pdf';
+        fileInput.onchange = function () {
+          if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+            const isImage = file.type.startsWith('image/');
+            if (isImage) {
+              compressImage(file, function (compressedUrl) {
+                displayImage(box, compressedUrl, file.name);
+              });
+            } else if (isPDF) {
+              const reader = new FileReader();
+              reader.onload = function (event) {
+                displayImage(box, event.target.result, file.name);
+              };
+              reader.readAsDataURL(file);
+            }
+          }
+        };
+        fileInput.click();
+      });
+    });
+
+    async function renderPdfPreview(container, src) {
+      const pagesContainer = container.querySelector('.pdf-pages-container');
+      if (!pagesContainer) return;
+
+      try {
+        if (!window['pdfjs-dist/build/pdf'] && !window.pdfjsLib) {
+          throw new Error('PDF.js não carregado');
+        }
+        const pdfjs = window.pdfjsLib || window['pdfjs-dist/build/pdf'];
+        const loadingTask = pdfjs.getDocument(src);
+        const pdf = await loadingTask.promise;
+        pagesContainer.innerHTML = '';
+
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+          const page = await pdf.getPage(pageNum);
+          const viewport = page.getViewport({ scale: 1.5 });
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          canvas.className = 'pdf-page-canvas';
+          canvas.style.maxWidth = '100%';
+          canvas.style.height = 'auto';
+          canvas.style.borderRadius = '4px';
+          canvas.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+
+          await page.render({ canvasContext: context, viewport: viewport }).promise;
+          pagesContainer.appendChild(canvas);
+        }
+      } catch (err) {
+        console.error('Erro ao renderizar PDF via PDF.js:', err);
+        pagesContainer.innerHTML = `<iframe class="pdf-preview" src="${src}" style="width: 100%; height: 350px; border: 1px solid var(--border-color); border-radius: 6px; margin-top: 10px;"></iframe>`;
+      }
+    }
+
+    function displayImage(box, src, fileName = '') {
+      const isPDF = src.startsWith('data:application/pdf') || src.includes('application/pdf') || (fileName && fileName.toLowerCase().endsWith('.pdf'));
+
+      if (isPDF) {
+        const displayName = fileName || 'evidencia.pdf';
+        const containerId = 'pdf-container-' + Math.random().toString(36).substr(2, 9);
+        box.innerHTML = `
+        <div id="${containerId}" class="evidence-pdf-container" style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.02); max-width: 100%;">
+          <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <div style="text-align: left;">
+                <span style="font-weight: 600; font-size: 14px; color: var(--text-color); word-break: break-all;">${displayName}</span>
+                <span style="display: block; font-size: 11px; color: var(--text-secondary);">Arquivo PDF Anexado</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px;" class="no-print">
+              <a href="${src}" target="_blank" download="${displayName}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 11px; border-radius: 6px; text-decoration: none;">Visualizar / Baixar PDF</a>
+              <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 11px; border-radius: 6px;" onclick="removeImage(this)">Remover</button>
+            </div>
+          </div>
+          <div class="pdf-pages-container" style="width: 100%; max-height: 500px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; background: #334155; display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 6px;">
+            <span style="color: #f8fafc; font-size: 13px;">Carregando visualização do PDF...</span>
+          </div>
+        </div>
+      `;
+        const pdfContainer = document.getElementById(containerId);
+        if (pdfContainer) {
+          renderPdfPreview(pdfContainer, src);
+        }
+      } else {
+        box.innerHTML = `
+        <div class="evidence-image-container" style="position: relative; display: inline-block; max-width: 100%;">
+          <img src="${src}" style="max-width: 100%; max-height: 450px; border-radius: 8px; border: 1px solid var(--border-color); display: block;" />
+          <button class="btn btn-secondary no-print" style="position: absolute; top: 10px; right: 10px; padding: 6px 12px; background: rgba(255,255,255,0.9); font-size: 11px; border-radius: 6px;" onclick="removeImage(this)">Remover</button>
+        </div>
+      `;
+      }
+      box.setAttribute('data-img-src', src);
+      if (fileName) {
+        box.setAttribute('data-file-name', fileName);
+      } else {
+        box.removeAttribute('data-file-name');
+      }
+    }
+
+    function removeImage(btn) {
+      const box = btn.closest('.evidence-box');
+      box.innerHTML = 'Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)';
+      box.removeAttribute('data-img-src');
+      box.removeAttribute('data-file-name');
+    }
+
+    // --- CONTROLE DE MELHORIAS DINÂMICAS ---
+    let improvementCount = 2;
+
+    function addImprovementRow(idVal = '', descVal = '', impVal = '', prioVal = '', respVal = '') {
+      const tbody = document.getElementById('improvements-tbody');
+      improvementCount++;
+      const nextId = idVal || `OM-ACC-${String(improvementCount).padStart(3, '0')}`;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+      <td><input type="text" class="editable-input improvement-id" value="${nextId}"></td>
+      <td><input type="text" class="editable-input improvement-desc" value="${descVal}" placeholder="Descreva a melhoria identificada..."></td>
+      <td><input type="text" class="editable-input improvement-imp" value="${impVal}" placeholder="Ex: Alto/Médio"></td>
+      <td><input type="text" class="editable-input improvement-prio" value="${prioVal}" placeholder="Ex: Média"></td>
+      <td><input type="text" class="editable-input improvement-resp" value="${respVal}" placeholder="Nome"></td>
+    `;
+      tbody.appendChild(tr);
+    }
+
+    // --- MONTAGEM DO OBJETO DE ESTADO ---
+    function getStateObj() {
+      const state = {
+        inputs: [],
+        radios: {},
+        improvements: [],
+        images: {},
+        fileNames: {}
+      };
+
+      document.querySelectorAll('.editable-input:not(.improvement-id):not(.improvement-desc):not(.improvement-imp):not(.improvement-prio):not(.improvement-resp), .editable-textarea, select.editable-input').forEach((input, index) => {
+        state.inputs.push({ index, value: input.value });
+      });
+
+      document.querySelectorAll('input[type="radio"]').forEach((radio, index) => {
+        state.radios[radio.name + '_' + radio.value] = radio.checked;
+      });
+
+      document.querySelectorAll('#improvements-tbody tr').forEach((tr) => {
+        state.improvements.push({
+          id: tr.querySelector('.improvement-id').value,
+          desc: tr.querySelector('.improvement-desc').value,
+          imp: tr.querySelector('.improvement-imp').value,
+          prio: tr.querySelector('.improvement-prio').value,
+          resp: tr.querySelector('.improvement-resp').value
+        });
+      });
+
+      document.querySelectorAll('.evidence-box').forEach((box, index) => {
+        const src = box.getAttribute('data-img-src');
+        const name = box.getAttribute('data-file-name');
+        if (src) {
+          state.images[`img_${index}`] = src;
+          if (name) {
+            state.fileNames[`name_${index}`] = name;
+          }
+        }
+      });
+
+      return state;
+    }
+
+    // --- APLICAÇÃO DO ESTADO NA TELA ---
+    function applyState(state) {
+      const tbody = document.getElementById('improvements-tbody');
+      tbody.innerHTML = '';
+      improvementCount = 0;
+
+      const inputs = document.querySelectorAll('.editable-input:not(.improvement-id):not(.improvement-desc):not(.improvement-imp):not(.improvement-prio):not(.improvement-resp), .editable-textarea, select.editable-input');
+      if (state.inputs) {
+        state.inputs.forEach(item => {
+          if (inputs[item.index]) inputs[item.index].value = item.value;
+        });
+      }
+
+      if (state.radios) {
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+          const key = radio.name + '_' + radio.value;
+          if (state.radios[key] !== undefined) {
+            radio.checked = state.radios[key];
+          }
+        });
+      }
+
+      if (state.improvements && state.improvements.length > 0) {
+        state.improvements.forEach(imp => {
+          addImprovementRow(imp.id, imp.desc, imp.imp, imp.prio, imp.resp);
+        });
+      }
+
+      document.querySelectorAll('.evidence-box').forEach((box) => {
+        box.innerHTML = 'Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)';
+        box.removeAttribute('data-img-src');
+        box.removeAttribute('data-file-name');
+      });
+
+      if (state.images) {
+        document.querySelectorAll('.evidence-box').forEach((box, index) => {
+          const src = state.images[`img_${index}`];
+          const name = state.fileNames ? state.fileNames[`name_${index}`] : '';
+          if (src) {
+            displayImage(box, src, name);
+          }
+        });
+      }
+    }
+
+    // --- PERSISTÊNCIA DE DADOS ---
+    function saveState() {
+      const state = getStateObj();
+
+      saveToDB('homologation_test_state_gestao_acesso', state)
+        .then(() => {
+          try {
+            const backupState = JSON.parse(JSON.stringify(state));
+            backupState.images = {};
+            backupState.fileNames = {};
+            localStorage.setItem('homologation_test_state_gestao_acesso', JSON.stringify(backupState));
+          } catch (e) { }
+          alert('Progresso salvo com sucesso localmente!');
+        })
+        .catch(err => {
+          console.error('Erro ao salvar no IndexedDB:', err);
+          try {
+            localStorage.setItem('homologation_test_state_gestao_acesso', JSON.stringify(state));
+            alert('Progresso salvo com sucesso localmente (localStorage)!');
+          } catch (e) {
+            if (e.name === 'QuotaExceededError') {
+              alert('Aviso: Limite de armazenamento atingido. O progresso foi salvo, mas algumas evidências são muito grandes. Tente salvar o documento como PDF para não perder seus anexos!');
+            } else {
+              alert('Erro ao salvar progresso: ' + e.message);
+            }
+          }
+        });
+    }
+
+    function loadState() {
+      getFromDB('homologation_test_state_gestao_acesso')
+        .then(state => {
+          if (state) {
+            applyState(state);
+          } else {
+            loadFromLocalStorage();
+          }
+        })
+        .catch(err => {
+          console.error('Erro ao ler do IndexedDB:', err);
+          loadFromLocalStorage();
+        });
+    }
+
+    function loadFromLocalStorage() {
+      const saved = localStorage.getItem('homologation_test_state_gestao_acesso');
+      if (!saved) return;
+      try {
+        const state = JSON.parse(saved);
+        applyState(state);
+      } catch (e) {
+        console.error('Erro ao ler do localStorage:', e);
+      }
+    }
+
+    window.onload = loadState;
+  </script>
+
+</body>
+
+</html>
