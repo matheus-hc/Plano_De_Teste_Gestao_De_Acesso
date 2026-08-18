@@ -423,6 +423,14 @@
         print-color-adjust: exact;
       }
 
+      .evidence-section {
+        display: none !important;
+      }
+
+      .evidence-section.has-evidence {
+        display: block !important;
+      }
+
       .evidence-box {
         border: 1px solid #cbd5e1 !important;
         background: transparent !important;
@@ -548,7 +556,7 @@
           </tr>
           <tr>
             <td><strong>Data Planejada</strong></td>
-            <td>13/08/2026</td>
+            <td>10/08/2026</td>
           </tr>
           <tr>
             <td><strong>Versão do Sistema</strong></td>
@@ -565,10 +573,7 @@
     <!-- Objetivo -->
     <div class="card">
       <h2>2. OBJETIVO</h2>
-      <p>Validar as regras de controle de acesso e visualização de Business Plans (BPs) no BP Web integrados com o
-        sistema HOT. O objetivo principal é garantir a restrição de dados sensíveis apenas aos usuários corretos
-        (envolvidos na demanda no HOT e grupos estratégicos corporativos), prevenindo vazamento de informações e
-        assegurando a rastreabilidade e autoria das demandas.
+      <p>Validar as regras de controle de acesso e visualização de Business Plans (BPs) no BP Web integrados com o sistema HOT. O objetivo principal é garantir a restrição de dados sensíveis apenas aos usuários corretos (envolvidos na demanda no HOT e grupos estratégicos corporativos), prevenindo vazamento de informações e assegurando a rastreabilidade e autoria das demandas.
       </p>
     </div>
 
@@ -580,22 +585,19 @@
           <h3 style="color: var(--success-color); font-weight: 700;">Dentro do Escopo</h3>
           <ul>
             <li><strong>Gestão de Acessos:</strong> Exibição do próprio usuário logado e permissões associadas.</li>
-            <li><strong>Grupos Especiais:</strong> Acesso de leitura a todos os BPs para Planejamento, Financeiro e SPE.
-            </li>
-            <li><strong>Vínculo HOT:</strong> Visualização do BP correspondente por envolvidos na demanda HOT via link.
-            </li>
-            <li><strong>Bloqueio de Acesso:</strong> Restrição de leitura a usuários não envolvidos/não autorizados.
-            </li>
+            <li><strong>Grupos Especiais:</strong> Acesso de leitura a todos os BPs para Planejamento, Financeiro e SPE.</li>
+            <li><strong>Vínculo HOT:</strong> Visualização do BP correspondente por envolvidos na demanda HOT via link.</li>
+            <li><strong>Bloqueio de Acesso:</strong> Restrição de leitura a usuários não envolvidos/não autorizados.</li>
             <li><strong>Edição de Permissões:</strong> Inclusão e exclusão manual de acesso a colaboradores.</li>
           </ul>
         </div>
-        <!-- <div class="scope-box" style="border-left: 4px solid var(--text-secondary);">
+        <div class="scope-box" style="border-left: 4px solid var(--text-secondary);">
           <h3 style="color: var(--text-secondary); font-weight: 700;">Fora do Escopo</h3>
           <ul>
             <li>Testes de infraestrutura do provedor de identidade (SSO/AD).</li>
             <li>Edição e preenchimento de campos operacionais por quem possui perfil somente leitura.</li>
           </ul>
-        </div> -->
+        </div>
       </div>
     </div>
 
@@ -631,11 +633,11 @@
             <td>Bloqueio de visualização de BP via link para usuários não envolvidos/não autorizados</td>
             <td><span style="font-family: monospace; font-weight: 600;">CT-ACC-004</span></td>
           </tr>
-          <!-- <tr>
+          <tr>
             <td><strong>CV-ACC-005</strong></td>
             <td>Edição de permissões (adicionar/remover acesso) na aba de Gestão de Acessos do BP</td>
             <td><span style="font-family: monospace; font-weight: 600;">CT-ACC-005</span></td>
-          </tr> -->
+          </tr>
         </tbody>
       </table>
     </div>
@@ -650,14 +652,14 @@
 
         <div class="test-case-detail">
           <h4>Objetivo</h4>
-          <p>Validar que o usuário que está visualizando ou editando um BP consiga ver seu próprio cadastro e nível de
-            permissão listados na aba "Gestão de Acessos".</p>
+          <p>Validar que o usuário que está visualizando ou editando um BP consiga ver seu próprio cadastro e nível de permissão listados na aba "Gestão de Acessos" daquele BP específico.</p>
         </div>
 
         <div class="test-case-detail">
           <h4>Pré-condições</h4>
           <ul>
-            <li>Usuário logado ao BP Web.</li>
+            <li>Usuário logado associado ao BP de teste.</li>
+            <li>BP aberto para visualização ou edição.</li>
           </ul>
         </div>
 
@@ -665,7 +667,8 @@
           <h4>Passos para reproduzir</h4>
           <ol>
             <li>Acessar o BP Web.</li>
-            <li>Clicar na aba <strong>Gestão de Acessos</strong> </li>
+            <li>Abrir o BP que o usuário logado está vinculado ou criou.</li>
+            <li>Clicar na aba <strong>Gestão de Acessos</strong> (normalmente localizada ao lado de "Histórico" ou "Checklist").</li>
             <li>Procurar o próprio nome/usuário na lista de acessos.</li>
           </ol>
         </div>
@@ -674,12 +677,11 @@
           <h4>Resultado Esperado</h4>
           <ul>
             <li>A aba Gestão de Acessos é aberta com sucesso.</li>
-            <li>O próprio usuário é listado de forma clara, indicando o tipo de perfil dele (ex: Elaborador, Gestor,
-              SPE, etc.) e suas permissões (Ativo).</li>
+            <li>O próprio usuário é listado de forma clara, indicando o tipo de perfil dele (ex: Elaborador, Gestor, SPE, etc.) e seu status (Ativo).</li>
           </ul>
         </div>
 
-        <div class="test-case-detail no-print">
+        <div class="test-case-detail evidence-section">
           <h4>Evidência do Teste (Print da Tela)</h4>
           <div class="evidence-box">
             Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)
@@ -700,24 +702,18 @@
 
       <!-- CT-ACC-002 -->
       <div class="test-case" id="ct-acc-002">
-        <h3>CV-ACC-002/CT-ACC-002 - Visualização de todos os BPs por Grupos Especiais (Planejamento, Financeiro, SPE)
-        </h3>
+        <h3>CV-ACC-002/CT-ACC-002 - Visualização de todos os BPs por Grupos Especiais (Planejamento, Financeiro, SPE)</h3>
 
         <div class="test-case-detail">
           <h4>Objetivo</h4>
-          <p>Garantir que usuários pertencentes aos grupos Planejamento, Financeiro ou SPE consigam listar, pesquisar e
-            visualizar os detalhes de qualquer BP cadastrado na base, mesmo que não sejam os criadores ou envolvidos
-            diretos.</p>
+          <p>Garantir que usuários pertencentes aos grupos Planejamento, Financeiro ou SPE consigam listar, pesquisar e visualizar os detalhes de qualquer BP cadastrado na base, mesmo que não sejam os criadores ou envolvidos diretos.</p>
         </div>
 
         <div class="test-case-detail">
           <h4>Pré-condições</h4>
           <ul>
-            <li>Usuário cadastrado no sistema BP Web vinculado a pelo menos um dos seguintes grupos:
-              <strong>Planejamento</strong>, <strong>Financeiro</strong> ou <strong>SPE</strong>.
-            </li>
-            <li>Existência de BPs cadastrados na base por outros usuários e setores sem relacionamento com o usuário de
-              teste.</li>
+            <li>Usuário cadastrado no sistema BP Web vinculado a pelo menos um dos seguintes grupos: <strong>Planejamento</strong>, <strong>Financeiro</strong> ou <strong>SPE</strong>.</li>
+            <li>Existência de BPs cadastrados na base por outros usuários e setores sem relacionamento com o usuário de teste.</li>
           </ul>
         </div>
 
@@ -727,7 +723,8 @@
             <li>Acessar o sistema BP Web em homologação.</li>
             <li>Logar com o perfil de usuário do grupo de teste (ex: Planejamento).</li>
             <li>Navegar até a tela de listagem de Business Plans.</li>
-            <li>Tentar localizar e abrir um BP criado por um usuário.</li>
+            <li>Tentar localizar e abrir um BP criado por um usuário de outro setor (onde o usuário de teste não é elaborador nem envolvido).</li>
+            <li>Repetir o teste com contas pertencentes aos grupos Financeiro e SPE.</li>
           </ol>
         </div>
 
@@ -739,7 +736,7 @@
           </ul>
         </div>
 
-        <div class="test-case-detail no-print">
+        <div class="test-case-detail evidence-section">
           <h4>Evidência do Teste (Print da Tela)</h4>
           <div class="evidence-box">
             Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)
@@ -764,15 +761,14 @@
 
         <div class="test-case-detail">
           <h4>Objetivo</h4>
-          <p>Garantir que um usuário que esteja cadastrado como envolvido em uma demanda no HOT consiga acessar e
-            visualizar os detalhes do BP correspondente ao clicar no link do HOT.</p>
+          <p>Garantir que um usuário que esteja cadastrado como envolvido em uma demanda no HOT consiga acessar e visualizar os detalhes do BP correspondente ao clicar no link do HOT.</p>
         </div>
 
         <div class="test-case-detail">
           <h4>Pré-condições</h4>
           <ul>
             <li>Demanda de projeto criada no HOT contendo o link do BP Web correspondente.</li>
-            <li>Usuário logado e <strong>Envolvido</strong> da referida demanda.</li>
+            <li>Usuário logado cadastrado na lista de <strong>Envolvidos</strong> da referida demanda.</li>
           </ul>
         </div>
 
@@ -790,13 +786,12 @@
         <div class="test-case-detail">
           <h4>Resultado Esperado</h4>
           <ul>
-            <li>O link HOT redireciona o usuário para o BP Web com o contexto correto.</li>
-            <li>O BP Web valida que o usuário é um envolvido direto e abre o BP para leitura sem bloqueios de segurança.
-            </li>
+            <li>O link HOT redireciona o usuário para o BP Web com o token/contexto correto.</li>
+            <li>O BP Web valida que o usuário é um envolvido direto e abre o BP para leitura sem bloqueios de segurança.</li>
           </ul>
         </div>
 
-        <div class="test-case-detail no-print">
+        <div class="test-case-detail evidence-section">
           <h4>Evidência do Teste (Print da Tela)</h4>
           <div class="evidence-box">
             Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)
@@ -821,17 +816,14 @@
 
         <div class="test-case-detail">
           <h4>Objetivo</h4>
-          <p>Garantir a segurança dos dados validando que um usuário que NÃO esteja cadastrado como envolvido na demanda
-            HOT e NÃO pertença aos grupos Planejamento, Financeiro ou SPE seja impedido de visualizar o BP ao tentar
-            acessar via link direto.</p>
+          <p>Garantir a segurança dos dados validando que um usuário que NÃO esteja cadastrado como envolvido na demanda HOT e NÃO pertença aos grupos Planejamento, Financeiro ou SPE seja impedido de visualizar o BP ao tentar acessar via link direto.</p>
         </div>
 
         <div class="test-case-detail">
           <h4>Pré-condições</h4>
           <ul>
-            <li>Link direto do BP Web copiado.</li>
-            <li>Usuário de teste logado que NÃO esteja cadastrado como envolvido naquela demanda e NÃO pertença a nenhum
-              dos 3 grupos especiais.</li>
+            <li>Link direto do BP Web copiado (ex: <code>https://bpwebhml.globalhitss.com.br/businessplan/view/9999</code>).</li>
+            <li>Usuário de teste logado que NÃO esteja cadastrado como envolvido naquela demanda e NÃO pertença a nenhum dos 3 grupos especiais.</li>
           </ul>
         </div>
 
@@ -849,12 +841,11 @@
           <h4>Resultado Esperado</h4>
           <ul>
             <li>O sistema identifica que o usuário não possui direito de acesso ao BP.</li>
-            <li>O acesso é negado exibindo mensagem de erro (ex: <em>"403 Acesso Negado"</em> ou <em>"Você não possui
-                permissão para visualizar este BP"</em>) ou redirecionando para a página inicial com segurança.</li>
+            <li>O acesso é negado exibindo mensagem de erro (ex: <em>"403 Acesso Negado"</em> ou <em>"Você não possui permissão para visualizar este BP"</em>) ou redirecionando para a página inicial com segurança.</li>
           </ul>
         </div>
 
-        <div class="test-case-detail no-print">
+        <div class="test-case-detail evidence-section">
           <h4>Evidência do Teste (Print da Tela)</h4>
           <div class="evidence-box">
             Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)
@@ -873,15 +864,13 @@
 
       <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 30px 0;" class="no-print">
 
-      <!-- CT-ACC-005
+      <!-- CT-ACC-005 -->
       <div class="test-case" id="ct-acc-005">
         <h3>CV-ACC-005/CT-ACC-005 - Gerenciamento de Acessos (Adicionar/Remover Colaboradores)</h3>
 
         <div class="test-case-detail">
           <h4>Objetivo</h4>
-          <p>Validar que o proprietário (Elaborador do BP) consiga incluir novos colaboradores com acessos de
-            edição/leitura e remover acessos de usuários existentes a partir da aba de Gestão de Acessos do BP Web,
-            atualizando os privilégios imediatamente.</p>
+          <p>Validar que o proprietário (Elaborador do BP) consiga incluir novos colaboradores com acessos de edição/leitura e remover acessos de usuários existentes a partir da aba de Gestão de Acessos do BP Web, atualizando os privilégios imediatamente.</p>
         </div>
 
         <div class="test-case-detail">
@@ -900,8 +889,7 @@
             <li>Pesquisar e selecionar um usuário de teste secundário (ex: <em>"joao.teste"</em>).</li>
             <li>Definir a permissão dele (ex: <em>"Leitura"</em>) e clicar em <strong>Salvar</strong>.</li>
             <li>Logar com o usuário secundário e validar se o BP agora aparece em seu painel.</li>
-            <li>Retornar ao usuário proprietário e clicar em <strong>Remover/Excluir</strong> na linha do usuário
-              secundário na aba Gestão de Acessos.</li>
+            <li>Retornar ao usuário proprietário e clicar em <strong>Remover/Excluir</strong> na linha do usuário secundário na aba Gestão de Acessos.</li>
             <li>Logar novamente com o usuário secundário e tentar acessar o BP.</li>
           </ol>
         </div>
@@ -910,12 +898,11 @@
           <h4>Resultado Esperado</h4>
           <ul>
             <li>A inclusão de novo usuário na aba salva com sucesso e o usuário secundário passa a visualizar o BP.</li>
-            <li>A remoção do usuário secundário retira imediatamente suas permissões, bloqueando novas tentativas de
-              visualização dele ao BP.</li>
+            <li>A remoção do usuário secundário retira imediatamente suas permissões, bloqueando novas tentativas de visualização dele ao BP.</li>
           </ul>
         </div>
 
-        <div class="test-case-detail no-print">
+        <div class="test-case-detail evidence-section">
           <h4>Evidência do Teste (Print da Tela)</h4>
           <div class="evidence-box">
             Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)
@@ -930,15 +917,14 @@
             <input type="radio" name="res-ct-acc-005" value="reprovado"> Reprovado
           </label>
         </div>
-      </div> -->
+      </div>
 
     </div>
 
     <!-- Registro de Melhorias -->
     <div class="card">
       <h2>6. REGISTRO DE MELHORIAS</h2>
-      <button class="btn btn-secondary no-print" onclick="addImprovementRow()"
-        style="margin-bottom: 15px; padding: 8px 16px;">+ Adicionar Melhoria</button>
+      <button class="btn btn-secondary no-print" onclick="addImprovementRow()" style="margin-bottom: 15px; padding: 8px 16px;">+ Adicionar Melhoria</button>
       <table>
         <thead>
           <tr>
@@ -952,16 +938,14 @@
         <tbody id="improvements-tbody">
           <tr>
             <td><input type="text" class="editable-input improvement-id" value="OM-ACC-001"></td>
-            <td><input type="text" class="editable-input improvement-desc"
-                placeholder="Descreva a melhoria identificada..."></td>
+            <td><input type="text" class="editable-input improvement-desc" placeholder="Descreva a melhoria identificada..."></td>
             <td><input type="text" class="editable-input improvement-imp" placeholder="Ex: Alto/Médio"></td>
             <td><input type="text" class="editable-input improvement-prio" placeholder="Ex: Média"></td>
             <td><input type="text" class="editable-input improvement-resp" placeholder="Nome"></td>
           </tr>
           <tr>
             <td><input type="text" class="editable-input improvement-id" value="OM-ACC-002"></td>
-            <td><input type="text" class="editable-input improvement-desc"
-                placeholder="Descreva a melhoria identificada..."></td>
+            <td><input type="text" class="editable-input improvement-desc" placeholder="Descreva a melhoria identificada..."></td>
             <td><input type="text" class="editable-input improvement-imp" placeholder="Ex: Alto/Médio"></td>
             <td><input type="text" class="editable-input improvement-prio" placeholder="Ex: Média"></td>
             <td><input type="text" class="editable-input improvement-resp" placeholder="Nome"></td>
@@ -1036,7 +1020,7 @@
             </td>
             <td><input type="text" class="editable-input" placeholder="Link/Anexo"></td>
           </tr>
-          <!-- <tr>
+          <tr>
             <td><strong>CT-ACC-005</strong></td>
             <td><input type="text" class="editable-input" placeholder="Nome do Executor"></td>
             <td><input type="date" class="editable-input"></td>
@@ -1048,7 +1032,7 @@
               </select>
             </td>
             <td><input type="text" class="editable-input" placeholder="Link/Anexo"></td>
-          </tr> -->
+          </tr>
         </tbody>
       </table>
     </div>
@@ -1186,16 +1170,16 @@
     function getDB() {
       return new Promise((resolve, reject) => {
         const request = indexedDB.open(DB_NAME, DB_VERSION);
-        request.onupgradeneeded = function (e) {
+        request.onupgradeneeded = function(e) {
           const db = e.target.result;
           if (!db.objectStoreNames.contains(STORE_NAME)) {
             db.createObjectStore(STORE_NAME);
           }
         };
-        request.onsuccess = function (e) {
+        request.onsuccess = function(e) {
           resolve(e.target.result);
         };
-        request.onerror = function (e) {
+        request.onerror = function(e) {
           reject(e.target.error);
         };
       });
@@ -1229,9 +1213,9 @@
     // --- COMPRESSÃO DE IMAGENS ---
     function compressImage(file, callback) {
       const reader = new FileReader();
-      reader.onload = function (e) {
+      reader.onload = function(e) {
         const img = new Image();
-        img.onload = function () {
+        img.onload = function() {
           const canvas = document.createElement('canvas');
           let width = img.width;
           let height = img.height;
@@ -1276,7 +1260,7 @@
               const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
               const isImage = file.type.startsWith('image/');
               if (isImage) {
-                compressImage(file, function (compressedUrl) {
+                compressImage(file, function(compressedUrl) {
                   displayImage(box, compressedUrl, file.name);
                 });
               } else if (isPDF) {
@@ -1312,7 +1296,7 @@
           const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
           const isImage = file.type.startsWith('image/');
           if (isImage) {
-            compressImage(file, function (compressedUrl) {
+            compressImage(file, function(compressedUrl) {
               displayImage(box, compressedUrl, file.name);
             });
           } else if (isPDF) {
@@ -1338,7 +1322,7 @@
             const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
             const isImage = file.type.startsWith('image/');
             if (isImage) {
-              compressImage(file, function (compressedUrl) {
+              compressImage(file, function(compressedUrl) {
                 displayImage(box, compressedUrl, file.name);
               });
             } else if (isPDF) {
@@ -1439,6 +1423,10 @@
       } else {
         box.removeAttribute('data-file-name');
       }
+      const wrapper = box.closest('.evidence-section');
+      if (wrapper) {
+        wrapper.classList.add('has-evidence');
+      }
     }
 
     function removeImage(btn) {
@@ -1446,6 +1434,10 @@
       box.innerHTML = 'Clique para anexar, arraste uma imagem/PDF ou cole do clipboard (Ctrl+V)';
       box.removeAttribute('data-img-src');
       box.removeAttribute('data-file-name');
+      const wrapper = box.closest('.evidence-section');
+      if (wrapper) {
+        wrapper.classList.remove('has-evidence');
+      }
     }
 
     // --- CONTROLE DE MELHORIAS DINÂMICAS ---
@@ -1543,6 +1535,10 @@
         box.removeAttribute('data-file-name');
       });
 
+      document.querySelectorAll('.evidence-section').forEach((wrapper) => {
+        wrapper.classList.remove('has-evidence');
+      });
+
       if (state.images) {
         document.querySelectorAll('.evidence-box').forEach((box, index) => {
           const src = state.images[`img_${index}`];
@@ -1565,7 +1561,7 @@
             backupState.images = {};
             backupState.fileNames = {};
             localStorage.setItem('homologation_test_state_gestao_acesso', JSON.stringify(backupState));
-          } catch (e) { }
+          } catch(e) {}
           alert('Progresso salvo com sucesso localmente!');
         })
         .catch(err => {
@@ -1604,7 +1600,7 @@
       try {
         const state = JSON.parse(saved);
         applyState(state);
-      } catch (e) {
+      } catch(e) {
         console.error('Erro ao ler do localStorage:', e);
       }
     }
